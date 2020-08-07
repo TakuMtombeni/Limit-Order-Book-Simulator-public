@@ -50,7 +50,7 @@ model = Model1(parameters=params)
 simulator = Simulator(lob_init=lob, model=model)
 
 start = timer.time()
-test = simulator.run(n=1, obs_freq=1, run_time=6.5*60*60)
+test = simulator.run(n=5, obs_freq=0.5, run_time=1*60*60)
 elapsed = timer.time() - start
 
 # %% Plot Mid Price and Excess Supply
@@ -58,4 +58,12 @@ test[0].mid_price.plot()
 plt.show()
 
 test[0].excess_supply.plot()
+plt.show()
+
+#%%
+test[0].mid_price.plot()
+test[1].mid_price.plot()
+test[2].mid_price.plot()
+test[3].mid_price.plot()
+test[4].mid_price.plot()
 plt.show()
