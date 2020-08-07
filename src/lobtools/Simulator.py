@@ -58,11 +58,11 @@ class Simulator:
             for event in event_times:
                 # simulation
                 if event[0] == 'loa':  # limit order arrival
-                    order = self.model.gen_limitorder(lob)
+                    order = self.model.gen_limit_order(lob)
                     id_list.append(lob.submit_limitorder(*order, event[1]))
 
                 elif event[0] == 'loc':  # limit order cancellation
-                    order_to_cancel = self.model.gen_cancelation(lob, id_list)
+                    order_to_cancel = self.model.gen_cancellation(lob, id_list)
                     if order_to_cancel >= 0:
                         lob.cancel_limitorder(order_to_cancel, event[1])
                     else:
