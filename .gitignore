@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/data/LOBSTER_SampleFile_AAPL_2012-06-21_50/
