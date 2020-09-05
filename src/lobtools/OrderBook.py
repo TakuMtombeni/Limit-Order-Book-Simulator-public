@@ -1,7 +1,7 @@
 # %% Dependencies
 from collections import deque
 from matplotlib import pyplot
-
+from numba import jit
 
 # %% OrderBook Data Structure Implementation
 class OrderBook:
@@ -97,6 +97,7 @@ class OrderBook:
                 vol += order[1]
         return vol
 
+    #@jit(target="cpu")
     def excess_supply(self, normalized=False):
         """
         Returns the Order Imbalance (excess supply)
@@ -121,7 +122,7 @@ class OrderBook:
         print(self.sell_side)
         print('******************************************************')
 
-    def submit_limitorder(self, trade_sign, price, volume, time):
+    def submit_limitorder(self, trade_sign, price=None, volume=None, time=None):
         """
         Submits a limit order to the order-book
 
@@ -132,6 +133,11 @@ class OrderBook:
 
         :return: The ID assigned to the limit order
         """
+        if price is None:
+            if trade_sign == 1:
+                price = self.bestbid()
+            else:
+                price = self.bestask()
 
         self.check_order_validity(price, volume, time)
 
@@ -183,7 +189,9 @@ class OrderBook:
         if not ((volume / self.lot_size).is_integer()) or volume <= 0:
             raise ValueError('The volume entered is not permissible')
         if time <= self.time:
-            raise ValueError('The time entered must be greater than the current time in the LOB')
+            raise ValueError('The time entered {} must be greater than the current '
+                             'time in the LOB {}'.format(time, self.time))
+
 
     def cancel_limitorder(self, order_id, time):
         """
@@ -291,8 +299,6 @@ class OrderBook:
 
             if return_price:
                 return execution_price
-
-
         else:
             raise ValueError('Invalid Trade Sign')
 
